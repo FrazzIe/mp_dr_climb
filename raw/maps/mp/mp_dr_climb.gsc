@@ -78,6 +78,7 @@ main() {
 	level waittill("round_started");
 
 	thread timedMessages();
+	thread startDoor(10, 5);
 }
 
 //Timed informative messages/credits
@@ -92,6 +93,23 @@ timedMessages() {
 			count = 0;
 		wait(10);
 	}
+}
+
+//Start door
+startDoor(interval, time) {
+	door = getEntArray("start_door", "targetname");
+
+	wait(interval - 3);
+
+	iPrintLnBold("^4Opening in...");
+
+	for (i = 3; i > 0; i--) {
+		iPrintLnBold("^" + i + "" + i);
+		wait(1);
+	}
+
+	for (i = 0; i < door.size; i++)
+		door[i] moveY(int(door[i].script_noteworthy), time);
 }
 
 //Trap functionality
