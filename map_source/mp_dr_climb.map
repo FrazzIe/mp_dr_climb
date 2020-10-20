@@ -3,17 +3,15 @@ iwmap 4
 "The Map" flags 
 // entity 0
 {
-"radiosityScale" "1.8"
-"bouncefraction" ".2"
-"contrastGain" "0.425"
-"sunRadiosity" "1"
-"sunlight" "1.35"
-"sundirection" "-35 150 0"
-"sundiffusecolor" "0.717647 0.776471 1.000000"
-"suncolor" "0.996078 0.96 0.88"
-"diffusefraction" "0.5"
+"northyaw" "90"
+"_color" ".85 .9 1"
 "ambient" "0.1"
-"_color" "1 1 0.5"
+"diffusefraction" ".35"
+"suncolor" "1 .95 0.8"
+"sundiffusecolor" ".8 .85 1"
+"sundirection" "-40 290 0"
+"sunlight" "1.5"
+"contrastGain" ".25"
 "classname" "worldspawn"
 // brush 0
 {
