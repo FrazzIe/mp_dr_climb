@@ -38,7 +38,7 @@ main() {
 	level.roomOccupied = false;
 	self.activatedTraps = [];
 	self.trapCount = 12;
-	self.miscCount = 7;
+	self.miscCount = 9;
 
 	//secret rewards/offset END
 
@@ -495,6 +495,8 @@ miscData(id) {
 				}
 				break;
 			case 6: //Elevator
+			case 7:
+			case 8:
 				elevator = getEnt("misc_" + id + "_elevator", "targetname");
 				elevator thread movePlatform("z", int(elevator.script_noteworthy), 3, 0, 2);
 				break;
