@@ -37,8 +37,8 @@ main() {
 	level.trapTriggers = [];
 	level.roomOccupied = false;
 	self.activatedTraps = [];
-	self.trapCount = 0;
-	self.miscCount = 6;
+	self.trapCount = 12;
+	self.miscCount = 7;
 
 	//secret rewards/offset END
 
@@ -112,6 +112,79 @@ startDoor(interval, time) {
 		door[i] moveY(int(door[i].script_noteworthy), time);
 }
 
+//Thread for spinner traps
+spinnerTrap(axis, amnt, time, interval, pause) {
+	if (interval > 0)
+		wait(interval);
+
+	while(true) {
+		switch(axis) {
+			case "pitch":
+				self rotatePitch(amnt, time);
+				break;
+			case "yaw":
+				self rotateYaw(amnt, time);
+				break;
+			case "roll":
+				self rotateRoll(amnt, time);
+				break;
+			default:
+				break;
+		}
+		wait(time);
+		if (pause > 0)
+			wait(pause);
+	}
+}
+
+movePlatform(axis, amnt, time, interval, pause) {
+	if (interval > 0)
+		wait(interval);
+
+	while (true) {
+		switch(axis) {
+			case "x":
+				self moveX(amnt, time);
+				break;
+			case "y":
+				self moveY(amnt, time);
+				break;
+			case "z":
+				self moveZ(amnt, time);
+				break;
+			default:
+				break;
+		}
+		wait(time);
+		if (pause > 0)
+			wait(pause);
+		amnt = 0 - amnt;
+	}
+}
+
+spinMove(spinner, amnt, time, interval) {
+	if (interval > 0)
+		wait(interval);
+	
+	while (true) {
+		self moveZ(amnt, time);
+		spinner moveZ(amnt, time);
+
+		wait(time);
+
+		if (amnt < 0) {
+			spinner rotatePitch(360, 1);
+			wait(0.2);
+			spinner notSolid();
+			wait(0.8);
+			spinner solid();
+		} else
+			wait(1);
+
+		amnt = 0 - amnt;
+	}
+}
+
 //Trap functionality
 trapData(id) {
 	self.activatedTraps[id] = false;
@@ -121,6 +194,26 @@ trapData(id) {
 		return;
 
 	switch(id) { //before activation functionality
+		case 2: //Spike crush
+			for (i = 0; i < 2; i++) {
+				spike = getEnt("trap_" + id + "_spike_" + i, "targetname");
+				spikeTrigger = getEnt("trap_" + id + "_hurt_" + i, "targetname");
+				spikeTrigger enableLinkTo();
+				spikeTrigger linkTo(spike);
+			}
+			break;
+		case 3: //Spike ladder swipe
+			spike = getEnt("trap_" + id + "_spike", "targetname");
+			spikeTrigger = getEnt("trap_" + id + "_hurt", "targetname");
+			spikeTrigger enableLinkTo();
+			spikeTrigger linkTo(spike);
+			break;
+		case 5: //Spin moving platform
+			mover = getEnt("trap_" + id + "_mover", "targetname");
+			spinner = getEnt("trap_" + id + "_spinner", "targetname");
+			mover thread movePlatform("x", int(mover.script_noteworthy), 1.5, 0, 1);
+			spinner thread movePlatform("x", int(mover.script_noteworthy), 1.5, 0, 1);
+			break;
 		default:
 			break;
 	}
@@ -130,6 +223,132 @@ trapData(id) {
 	level.trapTriggers[id] delete();
 
 	switch(id) { //after activation functionality
+		case 0: //Bounce rotate
+			bounce = getEnt("trap_" + id + "_bounce", "targetname");
+			bounce thread spinnerTrap("yaw", 360, 2, 0, 2);
+			break;
+		case 1: //Platform spin
+			spinners = getEntArray("trap_" + id + "_spinner", "targetname");
+			spinInterval = 0;
+			for (i = 0; i < spinners.size; i++) {
+				spinners[i] thread spinnerTrap("roll", 360, 1, spinInterval, 2);
+				spinInterval += 1;
+			}
+			break;
+		case 2: //Spike crush
+			while (true) {
+				for (i = 0; i < 2; i++) {
+					spike = getEnt("trap_" + id + "_spike_" + i, "targetname");
+					spike moveZ(int(spike.script_noteworthy), 1);
+				}
+
+				wait(3);
+
+				for (i = 0; i < 2; i++) {
+					spike = getEnt("trap_" + id + "_spike_" + i, "targetname");
+					spike moveZ(0 - int(spike.script_noteworthy), 1);
+				}
+
+				wait(4);
+			}
+			break;
+		case 3: //Spike ladder swipe
+			spike = getEnt("trap_" + id + "_spike", "targetname");
+			spike moveZ(int(spike.script_noteworthy), 2);
+			break;
+		case 4: //Remove 2 of 4 platforms
+			for (i = 0; i < 2; i++) {
+				platforms = getEntArray("trap_" + id + "_platform_" + i, "targetname");
+				randomPlatform = randomInt(platforms.size);
+				platforms[randomPlatform] moveY(int(platforms[randomPlatform].script_noteworthy), 1);
+				platforms[randomPlatform] notSolid();
+			}
+			break;
+		case 5: //Spin moving platforms
+			spinner = getEnt("trap_" + id + "_spinner", "targetname");
+			spinner rotatePitch(360, 1);
+			spinner notSolid();
+			wait(1);
+			spinner solid();
+			break;
+		case 6: //Platfrom spin
+			spinners = getEntArray("trap_" + id + "_spinner", "targetname");
+			rotation = 360;
+			for (i = 0; i < spinners.size; i++) {
+				spinners[i] thread spinnerTrap("pitch", rotation, 2.5, 0, 0);
+				rotation = 0 - rotation;				
+			}
+			break;
+		case 7: //Passive moving in a circle platforms
+			// +x, +y, -x, -y
+			// 224, 256, -224, -256
+			platforms = getEntArray("trap_" + id + "_platform", "targetname");			
+			idx = 0;
+
+			while (true) {
+				count = idx;
+
+				for (i = 0; i < platforms.size; i++) {
+					switch(count) {
+						case 0:
+							platforms[i] moveX(224, 1);
+							break;
+						case 1:
+							platforms[i] moveY(256, 1);
+							break;
+						case 2:
+							platforms[i] moveX(-224, 1);
+							break;
+						case 3:
+							platforms[i] moveY(-256, 1);
+							break;
+						default:
+							break;
+					}
+					count += 1;
+					if (count > 3)
+						count = 0;
+				}
+
+				wait(1);
+				idx += 1;
+				if (idx > 3)
+					idx = 0;
+			}
+			break;
+		case 8: //C4 Explosive trap
+			explosive = getEnt("trap_" + id + "_c4", "targetname");
+			playFX(level._effect["boom"], explosive.origin);
+			explosive playSound("grenade_explode_default");
+			radiusDamage(explosive.origin, 200, 500, 500);
+			explosive delete();
+			break;
+		case 9: //Hole in the wall trap
+			mover = getEnt("trap_" + id + "_mover", "targetname");
+			mover thread movePlatform("y", int(mover.script_noteworthy), 1, 0, 0);
+			break;
+		case 10: //Spinning, Moving trap?
+			movers = getEntArray("trap_" + id + "_mover", "targetname");
+			spinners = getEntArray("trap_" + id + "_spinner", "targetname");
+			moveInterval = 0;
+			for (i = 0; i < movers.size; i++) {
+				movers[i] thread spinMove(spinners[i], int(movers[i].script_noteworthy), 2, moveInterval);
+				moveInterval += 0.5;
+			}
+			break;
+		case 11: //Circle spinners
+			spinners = getEntArray("trap_" + id + "_spinner", "targetname");
+			while (true) {
+				for (i = 0; i < 6; i++) {
+					for (j = 0; j < spinners.size; j++) {
+						spinners[j] rotateYaw(360, 0.5);
+					}
+					wait(0.5);
+				}
+
+				wait(2);
+			}
+			break;
 		default:
 			break;
 	}
@@ -274,6 +493,10 @@ miscData(id) {
 					player giveMaxAmmo(weapon);
 					player switchToWeapon(weapon);
 				}
+				break;
+			case 6: //Elevator
+				elevator = getEnt("misc_" + id + "_elevator", "targetname");
+				elevator thread movePlatform("z", int(elevator.script_noteworthy), 3, 0, 2);
 				break;
 			default:
 				break;
