@@ -22,3 +22,8 @@ material,frzl_music_2
 material,frzl_music_3
 material,frzl_music_4
 sound,frzl_music,,all_mp,,
+// Connect 4
+rawfile,maps/utils/connect4.gsc
+material,connect4_blue
+material,connect4_red
+material,connect4_yellow

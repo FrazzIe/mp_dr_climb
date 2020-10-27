@@ -38,7 +38,7 @@ main() {
 	level.roomOccupied = false;
 	self.activatedTraps = [];
 	self.trapCount = 12;
-	self.miscCount = 9;
+	self.miscCount = 10;
 
 	//secret rewards/offset END
 
@@ -500,6 +500,33 @@ miscData(id) {
 				elevator = getEnt("misc_" + id + "_elevator", "targetname");
 				elevator thread movePlatform("z", int(elevator.script_noteworthy), 3, 0, 2);
 				break;
+			case 9: //Connect 4 end room
+				if (isDefined(player.ghost) && player.ghost) {
+					player suicide();
+					continue;
+				} //kill players in ghost mode
+
+				if (player.pers["team"] == "axis") //only accept jumpers
+					continue;
+
+				if (isDefined(level.disableRoomPlugin) && !level.disableRoomPlugin) { //check if respect plugin is enabled
+					if (!respectPluginCheck(player))
+						continue;
+				} else if (level.roomOccupied)
+					continue;
+
+				if (!(isDefined(level.disableRoomPlugin) && !level.disableRoomPlugin)) { //check if respect plugin is disabled
+					level.roomOccupied = true;
+					player thread roomDeathListener();
+				}
+
+				//get room participants
+				players = [];
+				players[0] = player;
+				if (isDefined(level.activ) && isAlive(level.activ))
+					players[1] = level.activ;
+
+				maps\utils\connect4::main(players, 300);
 			default:
 				break;
 		}
