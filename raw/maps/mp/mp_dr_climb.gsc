@@ -38,7 +38,7 @@ main() {
 	level.roomOccupied = false;
 	self.activatedTraps = [];
 	self.trapCount = 12;
-	self.miscCount = 10;
+	self.miscCount = 11;
 
 	//secret rewards/offset END
 
@@ -501,6 +501,7 @@ miscData(id) {
 				elevator thread movePlatform("z", int(elevator.script_noteworthy), 3, 0, 2);
 				break;
 			case 9: //Connect 4 end room
+			case 10: //Simon says end room
 				if (isDefined(player.ghost) && player.ghost) {
 					player suicide();
 					continue;
@@ -526,7 +527,17 @@ miscData(id) {
 				if (isDefined(level.activ) && isAlive(level.activ))
 					players[1] = level.activ;
 
-				maps\utils\connect4::main(players, 300);
+				switch(id) {
+					case 9:
+						maps\utils\connect4::main(players, 300);
+						break;
+					case 10:
+						maps\utils\simon::main(players);
+						break;
+					default:
+						break;
+				}
+				break;
 			default:
 				break;
 		}
