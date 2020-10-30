@@ -2,6 +2,11 @@
 
 A CoD4 deathrun map for [Deathrun 1.2 Mod by BraXi](https://github.com/BraXi/CoD4_DeathRun_1.2_Mod)
 
+### Build Dependencies
+
+ - [mp_dr_connect4](https://github.com/FrazzIe/mp_dr_connect4)
+ - [mp_dr_simon](https://github.com/FrazzIe/mp_dr_simon)
+
 ### Features
 
 - Custom music menu (4 songs, changeable)
