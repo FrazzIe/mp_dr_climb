@@ -38,7 +38,7 @@ main() {
 	level.roomOccupied = false;
 	self.activatedTraps = [];
 	self.trapCount = 12;
-	self.miscCount = 11;
+	self.miscCount = 14;
 
 	//secret rewards/offset END
 
@@ -497,6 +497,7 @@ miscData(id) {
 			case 6: //Elevator
 			case 7:
 			case 8:
+			case 11:
 				elevator = getEnt("misc_" + id + "_elevator", "targetname");
 				elevator thread movePlatform("z", int(elevator.script_noteworthy), 3, 0, 2);
 				break;
@@ -537,6 +538,23 @@ miscData(id) {
 					default:
 						break;
 				}
+				break;
+			case 12:
+			case 13:
+				zipline = spawn("script_model", (0, 0, 0));
+				zipline.origin = player.origin;
+				zipline.angles = player.angles;
+				player linkTo(zipline);
+				points = getEntArray("misc_" + id + "_point", "targetname");
+				time = 1/points.size;
+
+				for (i = 0; i < points.size; i++) {
+					zipline moveTo(points[i].origin, time);
+					wait(time);
+				}
+
+				player unlink();
+				zipline delete();
 				break;
 			default:
 				break;

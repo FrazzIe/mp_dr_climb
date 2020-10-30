@@ -34205,6 +34205,8 @@ iwmap 4
 }
 // entity 99
 {
+"hintstring" "Press ^3&&1 ^7to enter ^5Sniper"
+"script_noteworthy" "Sniper;4;remington700_mp;m40a3_mp"
 "targetname" "misc_1_trigger"
 "classname" "trigger_use_touch"
 // brush 0
@@ -35518,4 +35520,10 @@ iwmap 4
 {
 "origin" "-1024.0 4096.0 2432.0"
 "classname" "reflection_probe"
+}
+// entity 224
+{
+"origin" "1024.0 3072.0 1536.0"
+"model" "prefabs/sniper.map"
+"classname" "misc_prefab"
 }
