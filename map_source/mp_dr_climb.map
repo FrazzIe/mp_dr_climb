@@ -35582,13 +35582,13 @@ iwmap 4
 // entity 224
 {
 "origin" "1024.0 3072.0 1536.0"
-"model" "prefabs/sniper.map"
+"model" "prefabs/mp_dr_climb_sniper.map"
 "classname" "misc_prefab"
 }
 // entity 225
 {
 "origin" "1184.0 3840.0 1792.0"
-"model" "prefabs/knife.map"
+"model" "prefabs/mp_dr_climb_knife.map"
 "classname" "misc_prefab"
 }
 // entity 226
@@ -35600,5 +35600,5 @@ iwmap 4
 {
 "origin" "2208.0 3568.0 2304.0"
 "classname" "misc_prefab"
-"model" "prefabs/weapon.map"
+"model" "prefabs/mp_dr_climb_weapon.map"
 }
