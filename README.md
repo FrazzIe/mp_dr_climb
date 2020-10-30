@@ -10,6 +10,15 @@ A CoD4 deathrun map for [Deathrun 1.2 Mod by BraXi](https://github.com/BraXi/CoD
 ### Features
 
 - Custom music menu (4 songs, changeable)
+- 11 activator traps
+- 1 passive trap
+- 6 End choices
+  - Sniper room
+  - Weapon room
+  - Knife room
+  - Bounce room
+  - Simon says room
+  - Connect 4 room
 - Each end choice has multiple spawns (less chance of getting spawn killed if you fall)
 - Plugin support for the "Wait your turn" / turn respect
 - Non-intrusive map credit messages
