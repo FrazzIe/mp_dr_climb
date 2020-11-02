@@ -45,17 +45,17 @@ main() {
 	//Music info (name, duration)
 	self.songs = [];
 	self.songs[0] = [];
-	self.songs[0][0] = "";
-	self.songs[0][1] = 0;
+	self.songs[0][0] = "Clean Bandit - Solo";
+	self.songs[0][1] = 223;
 	self.songs[1] = [];
-	self.songs[1][0] = "";
-	self.songs[1][1] = 0;
+	self.songs[1][0] = "Hope";
+	self.songs[1][1] = 288;
 	self.songs[2] = [];
-	self.songs[2][0] = "";
-	self.songs[2][1] = 0;
+	self.songs[2][0] = "Sean Paul - No Lie";
+	self.songs[2][1] = 228;
 	self.songs[3] = [];
-	self.songs[3][0] = "";
-	self.songs[3][1] = 0;
+	self.songs[3][0] = "Turn It Up";
+	self.songs[3][1] = 185;
 	//Music Info End
 
 	//Map messages
@@ -64,6 +64,7 @@ main() {
 	precacheItem("m40a3_mp");
 	precacheItem("remington700_mp"); //sniper room
 	precacheItem("knife_mp"); //knife, bounce rooms
+	preCacheItem("mp5_mp"); //weapon room
 	preCacheMenu("frzl_music");
 	preCacheMenu("frzl_music_main"); //Custom music menu
 
