@@ -1,3 +1,3 @@
 main() {
-    level._effect["boom"] = LoadFx("explosions/default_explosion");
+    level._effect["boom"] = loadfx("explosions/default_explosion");
 }
